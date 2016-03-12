@@ -2,20 +2,20 @@ A [bootstrapper](https://github.com/NancyFx/Nancy/wiki/Bootstrapper) implementat
 
 ## Usage
 
-When Nancy detects that the `StructureMapNancyBootstrapper` type is available in the AppDomain of your application, it will assume you want to use it, rather than the default one.
+When Nancy detects that the `DryIocNancyBootstrapper` type is available in the AppDomain of your application, it will assume you want to use it, rather than the default one.
 
-The easiest way to get the latest version of `StructureMapNancyBootstrapper` into your application is to install the `Nancy.Bootstrappers.StructureMap` nuget.
+The easiest way to get the latest version of `DryIocNancyBootstrapper` into your application is to install the `Nancy.Bootstrappers.DryIoc` nuget.
 
 ### Customizing
 
-By inheriting from `StructureMapNancyBootstrapper` you will gain access to the `IContainer` of the application and request containers and can perform what ever reqistations that your application requires.
+By inheriting from `DryIocNancyBootstrapper` you will gain access to the `IContainer` of the application and request containers and can perform what ever reqistrations that your application requires.
 
 ```c#
 using Nancy;
 using Nancy.Bootstrapper;
-using Nancy.Bootstrappers.StructureMap;
-using StructureMap;
-
+using Nancy.Bootstrappers.DryIoc;
+using DryIoc;
+ 
 public class Bootstrapper : StructureMapNancyBootstrapper
 {
     protected override void ApplicationStartup(IContainer container, IPipelines pipelines)
@@ -53,15 +53,10 @@ protected override IContainer GetApplicationContainer()
 
 ## Contributors
 
-* [Andreas Håkansson](http://github.com/thecodejunkie)
-* [Andy Pike](http://github.com/andypike)
-* [David Alpert](http://github.com/davidalpert)
-* [Steven Robbins](http://github.com/grumpydev)
-
 ## Copyright
 
-Copyright © 2010 Andreas Håkansson, Steven Robbins and contributors
+Copyright © 2010 Maksim Volkau and contributors
 
 ## License
 
-Nancy.Bootstrappers.StructureMap is licensed under [MIT](http://www.opensource.org/licenses/mit-license.php "Read more about the MIT license form"). Refer to license.txt for more information.
+Nancy.Bootstrappers.DryIoc is licensed under [MIT](http://www.opensource.org/licenses/mit-license.php "Read more about the MIT license form"). Refer to license.txt for more information.
