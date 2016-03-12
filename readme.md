@@ -1,4 +1,4 @@
-A [bootstrapper](https://github.com/NancyFx/Nancy/wiki/Bootstrapper) implementation, for the [Nancy](http://nancyfx.org) framework, based on the StructureMap inversion of control container.
+A [bootstrapper](https://github.com/NancyFx/Nancy/wiki/Bootstrapper) implementation, for the [Nancy](http://nancyfx.org) framework, based on the DryIoc inversion of control container.
 
 ## Usage
 
@@ -16,7 +16,7 @@ using Nancy.Bootstrapper;
 using Nancy.Bootstrappers.DryIoc;
 using DryIoc;
  
-public class Bootstrapper : StructureMapNancyBootstrapper
+public class Bootstrapper : DryIocNancyBootstrapper
 {
     protected override void ApplicationStartup(IContainer container, IPipelines pipelines)
     {
