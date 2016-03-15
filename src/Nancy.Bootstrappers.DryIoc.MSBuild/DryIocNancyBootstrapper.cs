@@ -54,7 +54,7 @@ namespace Nancy.Bootstrappers.DryIoc
 
         protected override void RegisterNancyEnvironment(IContainer container, INancyEnvironment environment)
         {
-            container.RegisterDelegate(r => environment);
+            container.RegisterInstance(environment);
         }
 
         protected override INancyModule GetModule(IContainer container, Type moduleType)
@@ -62,19 +62,20 @@ namespace Nancy.Bootstrappers.DryIoc
             var moduleKey = moduleType.FullName;
 
             if (!container.IsRegistered<INancyModule>(moduleKey))
-                RegisterRequestContainerModules(container, new[] { new ModuleRegistration(moduleType) });
+                this.RegisterRequestContainerModules(container, new[] { new ModuleRegistration(moduleType) });
 
             return container.Resolve<INancyModule>(moduleKey);
         }
 
         protected override IEnumerable<IRegistrations> GetRegistrationTasks()
         {
-            return ApplicationContainer.Resolve<IEnumerable<IRegistrations>>();
+            return this.ApplicationContainer.Resolve<IEnumerable<IRegistrations>>();
         }
 
         protected override IEnumerable<IRequestStartup> RegisterAndGetRequestStartupTasks(IContainer container, Type[] requestStartupTypes)
         {
-            container.RegisterMany(requestStartupTypes, Reuse.Singleton, serviceTypeCondition: t => t == typeof(IRequestStartup));
+            container.RegisterMany(requestStartupTypes, Reuse.Singleton, 
+                serviceTypeCondition: t => t == typeof(IRequestStartup));
             return container.Resolve<IEnumerable<IRequestStartup>>();
         }
 
