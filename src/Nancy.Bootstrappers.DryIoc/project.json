@@ -1,9 +1,9 @@
 ﻿{
   "version": "2.0.0-*",
 
-  "description": "An StructureMap bootstrapper for the Nancy web framework.",
-  "authors": [ "Andreas Håkansson, Steven Robbins and contributors" ],
-  "tags": [ "Nancy", "StructureMap" ],
+  "description": "An DryIoc bootstrapper for the Nancy web framework.",
+  "authors": [ "Lucas Cebertin and Maksim Volkau" ],
+"tags": [ "Nancy", "DryIoc" ],
   "projectUrl": "http://nancyfx.org",
   "licenseUrl": "https://github.com/NancyFx/Nancy/blob/master/license.txt",
   "iconUrl": "http://nancyfx.org/nancy-nuget.png",
@@ -14,7 +14,7 @@
 
   "dependencies": {
     "Nancy": "2.0.0-*",
-    "DryIoc.dll": "2.2.2"
+    "DryIoc.dll": "2.2.2-*"
   },
 
   "frameworks": {

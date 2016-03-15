@@ -1,14 +1,12 @@
-namespace Nancy.Bootstrappers.StructureMap
+namespace Nancy.Bootstrappers.DryIoc
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using global::StructureMap;
-    using global::StructureMap.Pipeline;
+    using global::DryIoc;
     using Bootstrapper;
-    using Configuration;
     using Diagnostics;
     using ViewEngines;
+    using Configuration;
 
     public abstract class DryIocNancyBootstrapper : NancyBootstrapperWithRequestContainerBase<IContainer>
     {
@@ -44,24 +42,40 @@ namespace Nancy.Bootstrappers.StructureMap
             return ApplicationContainer.Resolve<INancyEngine>();
         }
 
+        protected override INancyEnvironmentConfigurator GetEnvironmentConfigurator()
+        {
+            return this.ApplicationContainer.Resolve<INancyEnvironmentConfigurator>();
+        }
+
+        public override INancyEnvironment GetEnvironment()
+        {
+            return this.ApplicationContainer.Resolve<INancyEnvironment>();
+        }
+
+        protected override void RegisterNancyEnvironment(IContainer container, INancyEnvironment environment)
+        {
+            container.RegisterInstance(environment);
+        }
+
         protected override INancyModule GetModule(IContainer container, Type moduleType)
         {
             var moduleKey = moduleType.FullName;
 
             if (!container.IsRegistered<INancyModule>(moduleKey))
-                RegisterRequestContainerModules(container, new[] { new ModuleRegistration(moduleType) });
+                this.RegisterRequestContainerModules(container, new[] { new ModuleRegistration(moduleType) });
 
             return container.Resolve<INancyModule>(moduleKey);
         }
 
         protected override IEnumerable<IRegistrations> GetRegistrationTasks()
         {
-            return ApplicationContainer.Resolve<IEnumerable<IRegistrations>>();
+            return this.ApplicationContainer.Resolve<IEnumerable<IRegistrations>>();
         }
 
         protected override IEnumerable<IRequestStartup> RegisterAndGetRequestStartupTasks(IContainer container, Type[] requestStartupTypes)
         {
-            container.RegisterMany(requestStartupTypes, Reuse.Singleton, serviceTypeCondition: t => t == typeof(IRequestStartup));
+            container.RegisterMany(requestStartupTypes, Reuse.Singleton, 
+                serviceTypeCondition: t => t == typeof(IRequestStartup));
             return container.Resolve<IEnumerable<IRequestStartup>>();
         }
 
