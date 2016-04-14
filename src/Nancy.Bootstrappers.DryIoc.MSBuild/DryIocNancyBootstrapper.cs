@@ -74,8 +74,9 @@ namespace Nancy.Bootstrappers.DryIoc
 
         protected override IEnumerable<IRequestStartup> RegisterAndGetRequestStartupTasks(IContainer container, Type[] requestStartupTypes)
         {
-            container.RegisterMany(requestStartupTypes, Reuse.Singleton, 
-                serviceTypeCondition: t => t == typeof(IRequestStartup));
+            container.RegisterMany(requestStartupTypes, Reuse.InWebRequest,
+                ifAlreadyRegistered: IfAlreadyRegistered.AppendNewImplementation,
+                serviceTypeCondition: type => type == typeof(IRequestStartup));
             return container.Resolve<IEnumerable<IRequestStartup>>();
         }
 
@@ -88,19 +89,24 @@ namespace Nancy.Bootstrappers.DryIoc
         protected override void RegisterCollectionTypes(IContainer container, IEnumerable<CollectionTypeRegistration> collectionTypeRegistrations)
         {
             var isScopedContainer = IsScoped(container);
-            foreach (var registration in collectionTypeRegistrations)
+            foreach (var r in collectionTypeRegistrations)
             {
-                foreach (var implementationType in registration.ImplementationTypes)
+                var implementationTypes = r.ImplementationTypes;
+                foreach (var implementationType in implementationTypes)
                 {
-                    Register(container, registration.RegistrationType, implementationType, registration.Lifetime, isScopedContainer);
+                    Register(container, r.RegistrationType, implementationType, r.Lifetime, isScopedContainer);
                 }
             }
         }
 
         protected override void RegisterInstances(IContainer container, IEnumerable<InstanceRegistration> instanceRegistrations)
         {
-            foreach (var instanceRegistration in instanceRegistrations)
-                container.RegisterInstance(instanceRegistration.RegistrationType, instanceRegistration.Implementation);
+            var isScopedContainer = IsScoped(container);
+            foreach (var r in instanceRegistrations)
+            {
+                var reuse = isScopedContainer ? Reuse.InWebRequest : Reuse.Singleton;
+                container.RegisterInstance(r.RegistrationType, r.Implementation, reuse, IfAlreadyRegistered.Replace);
+            }
         }
 
         protected override void RegisterRequestContainerModules(IContainer container, IEnumerable<ModuleRegistration> moduleRegistrationTypes)
@@ -119,23 +125,26 @@ namespace Nancy.Bootstrappers.DryIoc
         protected override void RegisterTypes(IContainer container, IEnumerable<TypeRegistration> typeRegistrations)
         {
             var isScopedContainer = IsScoped(container);
-            foreach (var registration in typeRegistrations)
+            foreach (var r in typeRegistrations)
             {
-                Register(container, registration.RegistrationType, registration.ImplementationType, registration.Lifetime, isScopedContainer);
+                Register(container, r.RegistrationType, r.ImplementationType, r.Lifetime, isScopedContainer);
             }
         }
 
         private bool IsScoped(IContainer container)
         {
-            // note: Replace with native method when supported in DryIoc 2.3
             return container.ContainerWeakRef.Scopes.GetCurrentScope() != null;
         }
 
         private static void Register(IRegistrator registrator, Type registrationType, Type implementationType, Lifetime lifetime,
             bool isScopedContainer)
         {
-            var reuse = MapLifetimeToReuse(isScopedContainer ? Lifetime.PerRequest : lifetime);
-            registrator.Register(registrationType, implementationType, reuse);
+            if (registrator.IsRegistered(registrationType,
+                condition: factory => factory.ImplementationType == implementationType))
+                return;
+            var reuse = isScopedContainer ? Reuse.InWebRequest : MapLifetimeToReuse(lifetime);
+            registrator.Register(registrationType, implementationType, reuse,
+                ifAlreadyRegistered: IfAlreadyRegistered.AppendNewImplementation);
         }
 
         private static IReuse MapLifetimeToReuse(Lifetime lifetime)
