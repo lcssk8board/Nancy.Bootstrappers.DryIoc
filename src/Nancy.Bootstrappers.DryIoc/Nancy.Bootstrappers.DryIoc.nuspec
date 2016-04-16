@@ -14,7 +14,7 @@
     <projectUrl>http://nancyfx.org</projectUrl>
     <dependencies>
       <dependency id="Nancy" />
-      <dependency id="DryIoc.dll" version="2.2.2" />
+      <dependency id="DryIoc.dll" version="2.4.0" />
     </dependencies>
     <tags>Nancy DryIoc</tags>
   </metadata>
