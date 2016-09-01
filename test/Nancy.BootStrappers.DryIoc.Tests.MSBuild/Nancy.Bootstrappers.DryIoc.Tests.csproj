@@ -37,8 +37,8 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DryIoc, Version=2.4.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\DryIoc.dll.2.4.0\lib\net45\DryIoc.dll</HintPath>
+    <Reference Include="DryIoc, Version=2.7.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\DryIoc.dll.2.7.0\lib\net45\DryIoc.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -102,7 +102,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />

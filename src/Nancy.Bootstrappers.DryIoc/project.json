@@ -2,7 +2,7 @@
   "version": "2.0.0-*",
 
   "description": "An DryIoc bootstrapper for the Nancy web framework.",
-  "authors": [ "Lucas Cebertin and Maksim Volkau" ],
+  "authors": [ "Lucas Cé Bertin and Maksim Volkau" ],
 "tags": [ "Nancy", "DryIoc" ],
   "projectUrl": "http://nancyfx.org",
   "licenseUrl": "https://github.com/NancyFx/Nancy/blob/master/license.txt",
@@ -14,7 +14,7 @@
 
   "dependencies": {
     "Nancy": "2.0.0-*",
-    "DryIoc.dll": "2.2.2-*"
+    "DryIoc.dll": "2.7.0-*"
   },
 
   "frameworks": {

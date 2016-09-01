@@ -17,7 +17,7 @@
     "dependencies": {
         "Nancy": { "target": "project" },
         "Nancy.Bootstrappers.DryIoc": { "target": "project" },
-        "DryIoc.dll": "2.2.2-*",
+        "DryIoc.dll": "2.7.0-*",
         "xunit": "2.1.0",
         "xunit.runner.dnx": "2.1.0-*"
     },
